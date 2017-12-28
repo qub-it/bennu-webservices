@@ -11,7 +11,7 @@
 
 	<groupId>com.qubit.solution.fenixedu</groupId>
 	<artifactId>bennu-webservices</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.0-NEW-DEV</version>
 	<packaging>pom</packaging>
 
 	<name>Bennu webservices</name>
