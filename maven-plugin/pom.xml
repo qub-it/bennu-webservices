@@ -1,31 +1,36 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>com.qubit.solution.fenixedu</groupId>
-		<artifactId>bennu-webservices</artifactId>
-		<version>2.0.2</version>
-		<relativePath>..</relativePath>
-	</parent>
+	<!-- <parent> <groupId>com.qubit.solution.fenixedu</groupId> <artifactId>bennu-webservices</artifactId> 
+		<version>2.0.1-rc-jdk11</version> <relativePath>..</relativePath> </parent> -->
 
 	<groupId>com.qubit.solution.fenixedu</groupId>
 	<artifactId>bennu-webservices-plugin</artifactId>
+	<version>2.0.2-rc-jdk11</version>
 	<packaging>maven-plugin</packaging>
 
 	<name>Bennu webservices sun-jaxws merger</name>
 
 	<properties>
-		<java.compilation.source.version>1.8</java.compilation.source.version>
-		<java.compilation.target.version>1.8</java.compilation.target.version>
-		<version.org.apache.maven.plugins.maven.compiler.plugin>3.1</version.org.apache.maven.plugins.maven.compiler.plugin>
+		<java.compilation.release>11</java.compilation.release>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!-- Plugins versions -->
+		<version.org.apache.maven.plugins.maven.compiler.plugin>3.8.0</version.org.apache.maven.plugins.maven.compiler.plugin>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-plugin-api</artifactId>
-			<version>2.0</version>
+			<version>3.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-core</artifactId>
+			<version>3.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven.plugin-tools</groupId>
@@ -34,15 +39,12 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-project</artifactId>
-			<version>2.2.1</version>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.twdata.maven</groupId>
-			<artifactId>mojo-executor</artifactId>
-			<version>2.2.0</version>
-		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -50,7 +52,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-plugin-plugin</artifactId>
-				<version>3.3</version>
+				<version>3.6.0</version>
 				<executions>
 					<execution>
 						<id>default-descriptor</id>
@@ -66,13 +68,10 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${version.org.apache.maven.plugins.maven.compiler.plugin}</version>
 				<configuration>
-					<source>${java.compilation.source.version}</source>
-					<target>${java.compilation.target.version}</target>
-					<verbose>true</verbose>
-					<fork>true</fork>
-					<fork>true</fork>
+					<release>${java.compilation.release}</release>
 					<maxmem>2048</maxmem>
 					<meminitial>1024</meminitial>
+					<fork>true</fork>
 				</configuration>
 			</plugin>
 		</plugins>
