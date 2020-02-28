@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
+import javax.xml.soap.Node;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
@@ -65,13 +66,13 @@ public class BennuWebServiceHandler implements SOAPHandler<SOAPMessageContext> {
     public boolean handleMessage(SOAPMessageContext context) {
         Boolean isRequest = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
 
-        //for response message only, true for outbound messages, false for inbound
+        // for response message only, true for outbound messages, false for inbound
         if (!isRequest) {
             try {
 
-                WebServiceServerConfiguration configuration =
-                        getWebServiceServerConfiguration(((com.sun.xml.ws.api.server.WSEndpoint) context
-                                .get("com.sun.xml.ws.api.server.WSEndpoint")).getImplementationClass().getName());
+                WebServiceServerConfiguration configuration = getWebServiceServerConfiguration(
+                        ((com.sun.xml.ws.api.server.WSEndpoint) context.get("com.sun.xml.ws.api.server.WSEndpoint"))
+                                .getImplementationClass().getName());
 
                 SOAPMessage soapMsg = context.getMessage();
                 SOAPEnvelope soapEnv = soapMsg.getSOAPPart().getEnvelope();
@@ -93,16 +94,26 @@ public class BennuWebServiceHandler implements SOAPHandler<SOAPMessageContext> {
                         String nonce = null;
                         String created = null;
 
-                        Iterator<SOAPElement> childElements = soapHeader.getChildElements(QNAME_WSSE_SECURITY);
+                        Iterator<Node> childElements = soapHeader.getChildElements(QNAME_WSSE_SECURITY);
                         if (childElements.hasNext()) {
-                            SOAPElement securityElement = childElements.next();
-                            Iterator<SOAPElement> usernameTokens = securityElement.getChildElements(QNAME_WSSE_USERNAME_TOKEN);
-                            if (usernameTokens.hasNext()) {
-                                SOAPElement usernameToken = usernameTokens.next();
-                                username = ((SOAPElement) usernameToken.getChildElements(QNAME_WSSE_USERNAME).next()).getValue();
-                                password = ((SOAPElement) usernameToken.getChildElements(QNAME_WSSE_PASSWORD).next()).getValue();
-                                nonce = ((SOAPElement) usernameToken.getChildElements(QNAME_WSSE_NONCE).next()).getValue();
-                                created = ((SOAPElement) usernameToken.getChildElements(QNAME_WSSE_CREATED).next()).getValue();
+                            Node securityElement = childElements.next();
+                            if (securityElement instanceof SOAPElement) {
+                                Iterator<Node> usernameTokens =
+                                        ((SOAPElement) securityElement).getChildElements(QNAME_WSSE_USERNAME_TOKEN);
+                                if (usernameTokens.hasNext()) {
+                                    Node node = usernameTokens.next();
+                                    if (node instanceof SOAPElement) {
+                                        SOAPElement usernameToken = (SOAPElement) node;
+                                        username = ((SOAPElement) usernameToken.getChildElements(QNAME_WSSE_USERNAME).next())
+                                                .getValue();
+                                        password = ((SOAPElement) usernameToken.getChildElements(QNAME_WSSE_PASSWORD).next())
+                                                .getValue();
+                                        nonce = ((SOAPElement) usernameToken.getChildElements(QNAME_WSSE_NONCE).next())
+                                                .getValue();
+                                        created = ((SOAPElement) usernameToken.getChildElements(QNAME_WSSE_CREATED).next())
+                                                .getValue();
+                                    }
+                                }
                             }
                         }
                         if (username == null || password == null || nonce == null || created == null) {
@@ -154,7 +165,7 @@ public class BennuWebServiceHandler implements SOAPHandler<SOAPMessageContext> {
             }
         }
 
-        //continue other handler chain
+        // continue other handler chain
         return true;
     }
 
