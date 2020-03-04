@@ -22,7 +22,6 @@
 	<modules>
 		<module>core</module>
 		<module>maven-plugin</module>
-		<module>maven-project</module>
 	</modules>
 
 	<distributionManagement>
