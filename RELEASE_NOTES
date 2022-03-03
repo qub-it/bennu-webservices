@@ -1,2 +1,4 @@
+- Bug fix: Remove RC module version dependency
+
 2.1.0 (09-03-2020)
 - Support for Java 11
