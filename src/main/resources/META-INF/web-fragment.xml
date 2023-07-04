@@ -10,6 +10,15 @@
 			com.sun.xml.ws.transport.http.servlet.WSServletContextListener
 		</listener-class>
 	</listener>
+	<filter>
+		<filter-name>SSLTerminationFilterAware</filter-name>
+		<filter-class>com.qubit.solution.fenixedu.bennu.webservices.filter.WebServicesFilter</filter-class>
+		<async-supported>true</async-supported>
+	</filter>
+	<filter-mapping>
+		<filter-name>SSLTerminationFilterAware</filter-name>
+		<url-pattern>/web-services/*</url-pattern>
+	</filter-mapping>
 	<servlet>
 		<servlet-name>WebserviceServlet</servlet-name>
 		<servlet-class>
