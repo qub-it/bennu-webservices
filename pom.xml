@@ -18,7 +18,7 @@
 	<name>Bennu webservices core</name>
 
 	<properties>
-		<version.org.fenixedu.bennu>6.0.8-FORK</version.org.fenixedu.bennu>
+		<version.org.fenixedu.bennu>6.3.0-FORK</version.org.fenixedu.bennu>
 		<version.slf4j.api>1.7.2</version.slf4j.api>
 		<version.commons.net>3.3</version.commons.net>
 	</properties>
