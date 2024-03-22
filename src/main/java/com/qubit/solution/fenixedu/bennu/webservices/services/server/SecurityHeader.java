@@ -33,6 +33,7 @@ import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.util.Base64;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -41,7 +42,6 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.apache.commons.net.util.Base64;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 import org.joda.time.format.DateTimeFormat;
@@ -96,14 +96,14 @@ public class SecurityHeader {
         SecretKey originalKey = new SecretKeySpec(this.sessionKey, 0, this.sessionKey.length, "AES");
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.DECRYPT_MODE, originalKey);
-        return new String(cipher.doFinal(Base64.decodeBase64(content)), "UTF-8");
+        return new String(cipher.doFinal(Base64.getDecoder().decode(content)), "UTF-8");
     }
 
     private byte[] decryptWithPrivateKey(String cipherText, PrivateKey privateKey) throws IOException, GeneralSecurityException {
 
         Cipher cipher = Cipher.getInstance("RSA");
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
-        return cipher.doFinal(Base64.decodeBase64(cipherText));
+        return cipher.doFinal(Base64.getDecoder().decode(cipherText));
     }
 
     private byte[] getSessionKey() {

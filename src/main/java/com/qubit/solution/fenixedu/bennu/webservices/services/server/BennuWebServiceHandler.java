@@ -28,6 +28,7 @@
 package com.qubit.solution.fenixedu.bennu.webservices.services.server;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -46,8 +47,6 @@ import javax.xml.ws.handler.MessageContext.Scope;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 import javax.xml.ws.soap.SOAPFaultException;
-
-import org.apache.commons.net.util.Base64;
 
 import com.qubit.solution.fenixedu.bennu.webservices.domain.webservice.WebServiceServerConfiguration;
 import com.sun.xml.ws.transport.Headers;
@@ -137,7 +136,7 @@ public class BennuWebServiceHandler implements SOAPHandler<SOAPMessageContext> {
                                 if (value.startsWith("Basic")) {
                                     String[] split = value.split(" ");
                                     try {
-                                        String decoded = new String(Base64.decodeBase64(split[1]), "UTF-8");
+                                        String decoded = new String(Base64.getDecoder().decode(split[1]), "UTF-8");
                                         String[] split2 = decoded.split(":");
                                         if (split2.length == 2) {
                                             username = split2[0];
