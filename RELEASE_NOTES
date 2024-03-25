@@ -1,3 +1,5 @@
+- Refactor: Removing commons-net dependency [#qubIT-Fenix-5090]
+
 2.2.0 (13-12-2023)
 - Improvement: Adds fenixedu OSS DM [#qubIT-Omnis-4736]
 

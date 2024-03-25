@@ -19,7 +19,6 @@
 
 	<properties>
 		<version.slf4j.api>1.7.2</version.slf4j.api>
-		<version.commons.net>3.3</version.commons.net>
 	</properties>
 
 	<dependencyManagement>
@@ -65,11 +64,6 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>${version.slf4j.api}</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-net</groupId>
-			<artifactId>commons-net</artifactId>
-			<version>${version.commons.net}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.xml.ws</groupId>
