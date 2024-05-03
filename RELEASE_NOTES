@@ -1,3 +1,5 @@
+- Refactor: Uses ResolverUtil to locate webservice clients [#qubIT-Omnis-5817]
+
 2.3.0 (25-03-2024)
 - Refactor: Removing commons-net dependency [#qubIT-Fenix-5090]
 
