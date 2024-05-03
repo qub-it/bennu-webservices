@@ -84,7 +84,6 @@ public class BennuWebservicesInitializer implements ServletContextListener {
             // use class cls found
         }
 
-        Bennu.getInstance().getWebserviceConfigurationsSet().removeIf(s -> s.getClass().equals(BennuWebServiceClient.class));
         deleteConfigurations(Bennu.getInstance().getWebserviceConfigurationsSet().stream()
                 .filter(configuration -> !configuration.isImplementationClassAvailable()).collect(Collectors.toList()));
 
