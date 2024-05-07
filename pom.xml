@@ -57,6 +57,11 @@
 			<artifactId>bennu-io</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.qubit.terra</groupId>
+			<artifactId>qub-foundation-core-api</artifactId>
+			<version>6.9.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>${version.slf4j.api}</version>
