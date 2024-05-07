@@ -27,6 +27,7 @@
 
 package com.qubit.solution.fenixedu.bennu.webservices.servlet;
 
+import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,12 +37,6 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import org.fenixedu.bennu.core.domain.Bennu;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
-import org.springframework.core.type.filter.AssignableTypeFilter;
-
-import pt.ist.fenixframework.Atomic;
-import pt.ist.fenixframework.Atomic.TxMode;
 
 import com.qubit.solution.fenixedu.bennu.webservices.domain.webservice.WebServiceAuthenticationLevel;
 import com.qubit.solution.fenixedu.bennu.webservices.domain.webservice.WebServiceClientConfiguration;
@@ -50,6 +45,10 @@ import com.qubit.solution.fenixedu.bennu.webservices.domain.webservice.WebServic
 import com.qubit.solution.fenixedu.bennu.webservices.domain.webservice.WebServiceServerConfiguration;
 import com.qubit.solution.fenixedu.bennu.webservices.services.client.BennuWebServiceClient;
 import com.qubit.solution.fenixedu.bennu.webservices.services.server.BennuWebService;
+import com.qubit.terra.framework.tools.classpath.ResolverUtil;
+
+import pt.ist.fenixframework.Atomic;
+import pt.ist.fenixframework.Atomic.TxMode;
 
 @WebListener
 public class BennuWebservicesInitializer implements ServletContextListener {
@@ -67,17 +66,17 @@ public class BennuWebservicesInitializer implements ServletContextListener {
         }
 
         // Since clients are initialised by the WsServlet we need to look them up via classpath scanning
-        // using spring componentprovider since we do not have OMNIS lookup available
         // 21 April 2015 - Paulo Abrantes
 
-        ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false);
-        provider.addIncludeFilter(new AssignableTypeFilter(BennuWebServiceClient.class));
+        Set<Class<? extends BennuWebServiceClient>> classes =
+                ResolverUtil.loadImplementationsFromContextClassloader(BennuWebServiceClient.class, true);
 
-        Set<BeanDefinition> components =
-                provider.findCandidateComponents(BennuWebServiceClient.class.getPackage().getName().replace('.', '/'));
-        for (BeanDefinition component : components) {
+        // Removes abstract classes
+        classes.removeIf(clazz -> Modifier.isAbstract(clazz.getModifiers()));
+
+        for (Class<? extends BennuWebServiceClient> component : classes) {
             try {
-                Class cls = Class.forName(component.getBeanClassName());
+                Class cls = Class.forName(component.getName());
                 checkClientConfigurationAndCreateIfNeeded(cls.getName());
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -126,8 +125,8 @@ public class BennuWebservicesInitializer implements ServletContextListener {
         if (readByImplementationClass.getAuthenticationLevel() == WebServiceAuthenticationLevel.PASSWORD) {
             readByImplementationClass.setAuthenticationLevel(WebServiceAuthenticationLevel.WS_SECURITY);
         }
-        
-        if(readByImplementationClass.getExecutionContext() == null) {
+
+        if (readByImplementationClass.getExecutionContext() == null) {
             readByImplementationClass.setExecutionContext(WebServiceExecutionContext.PRODUCTION);
         }
     }
