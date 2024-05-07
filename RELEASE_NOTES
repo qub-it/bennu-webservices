@@ -1,3 +1,4 @@
+2.4.0 (07-05-2024)
 - Refactor: Uses ResolverUtil to locate webservice clients [#qubIT-Omnis-5817]
 - Refactor: Removes spring related classes [#qubIT-Omnis-5818]
 
