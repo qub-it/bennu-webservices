@@ -29,10 +29,7 @@ package com.qubit.solution.fenixedu.bennu.webservices.services.server;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.security.GeneralSecurityException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
+import java.security.*;
 import java.util.Base64;
 
 import javax.crypto.BadPaddingException;
@@ -52,6 +49,8 @@ import com.qubit.solution.fenixedu.bennu.webservices.domain.webservice.WebServic
 import com.qubit.solution.fenixedu.bennu.webservices.tools.keystore.KeyStoreWorker;
 
 public class SecurityHeader {
+
+    private static final String SUN_JCE_PROVIDER = "SunJCE";
 
     final private WebServiceServerConfiguration configuration;
     final private String username;
@@ -91,19 +90,30 @@ public class SecurityHeader {
         }
     }
 
-    private String decryptWithSessionKey(String content) throws InvalidKeyException, NoSuchAlgorithmException,
-            NoSuchPaddingException, UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException {
+    private String decryptWithSessionKey(String content)
+            throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, UnsupportedEncodingException,
+            IllegalBlockSizeException, BadPaddingException, NoSuchProviderException {
         SecretKey originalKey = new SecretKeySpec(this.sessionKey, 0, this.sessionKey.length, "AES");
-        Cipher cipher = Cipher.getInstance("AES");
+        Cipher cipher = getSessionCipherInstance();
         cipher.init(Cipher.DECRYPT_MODE, originalKey);
         return new String(cipher.doFinal(Base64.getDecoder().decode(content)), "UTF-8");
     }
 
+    protected static Cipher getSessionCipherInstance()
+            throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException {
+        return Cipher.getInstance("AES", SUN_JCE_PROVIDER);
+    }
+
     private byte[] decryptWithPrivateKey(String cipherText, PrivateKey privateKey) throws IOException, GeneralSecurityException {
 
-        Cipher cipher = Cipher.getInstance("RSA");
+        Cipher cipher = getPrivateKeyCipherInstance();
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
         return cipher.doFinal(Base64.getDecoder().decode(cipherText));
+    }
+
+    protected static Cipher getPrivateKeyCipherInstance()
+            throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException {
+        return Cipher.getInstance("RSA", SUN_JCE_PROVIDER);
     }
 
     private byte[] getSessionKey() {
