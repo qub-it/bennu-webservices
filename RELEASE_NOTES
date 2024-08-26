@@ -1,3 +1,5 @@
+- Improvement: Ensures Release Notes is in the jar [#qubIT-Omnis-6579]
+
 2.7.0 (28-08-2024)
 - New feature: Support to define custom timeouts (connect and read) for each web service client [#UL-REIT-4063]
 
