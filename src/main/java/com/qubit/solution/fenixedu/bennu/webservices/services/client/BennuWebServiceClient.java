@@ -59,6 +59,9 @@ public abstract class BennuWebServiceClient<T> {
 //        });
 //    }
 
+    private static final String CONNECTION_TIMEOUT_PROPERTY = "com.sun.xml.ws.connect.timeout";
+    private static final String READ_TIMEOUT_PROPERTY = "com.sun.xml.ws.request.timeout";
+
     private static final Logger logger = LoggerFactory.getLogger(BennuWebServiceClient.class);
 
     private String username;
@@ -116,8 +119,17 @@ public abstract class BennuWebServiceClient<T> {
             setSSLConnection(bindingProvider);
         }
 
+        if (configuration.getConnectTimeout() != null) {
+            String name = CONNECTION_TIMEOUT_PROPERTY;
+            bindingProvider.getRequestContext().put(name, configuration.getConnectTimeout());
+        }
+        if (configuration.getReadTimeout() != null) {
+            String name = READ_TIMEOUT_PROPERTY;
+            bindingProvider.getRequestContext().put(name, configuration.getReadTimeout());
+
+        }
         if (configuration.isSecured()) {
-            
+
             if (configuration.isUsingWSSecurity()) {
                 List<Handler> handlerList = bindingProvider.getBinding().getHandlerChain();
                 if (handlerList == null) {

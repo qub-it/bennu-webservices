@@ -52,6 +52,8 @@ class webservice.WebServiceClientConfiguration extends webservice.WebServiceConf
 	String aliasForCerficate;
 	String clientUsername;
 	String clientPassword;
+	Integer connectTimeout;
+	Integer readTimeout;
 	WebServiceExecutionContext executionContext;
 }
 
